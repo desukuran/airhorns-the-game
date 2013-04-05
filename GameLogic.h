@@ -19,6 +19,9 @@ public:
 	static void Draw(int x, int y, SDL_Surface* source, SDL_Surface* destination);
 
 	static SDL_Surface* screen;
+
+	//Variables
 	int playing;
+	static int ScreenHeight, ScreenWidth;
 	
 };

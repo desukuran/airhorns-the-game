@@ -190,6 +190,10 @@
 				RelativePath=".\Music.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\Timer.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -210,6 +214,10 @@
 			</File>
 			<File
 				RelativePath=".\Music.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Timer.h"
 				>
 			</File>
 		</Filter>
