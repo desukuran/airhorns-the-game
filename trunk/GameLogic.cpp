@@ -1,12 +1,17 @@
 #include "GameLogic.h"
 #include <iostream>
 #include <fstream>
+#include <ostream>
 
 #include "SDL.h"
 
 using namespace std;
 
+//Resolve Extrernal whatever
 SDL_Surface* CGameLogic::screen = NULL;
+int CGameLogic::ScreenHeight;
+int CGameLogic::ScreenWidth;
+
 
 CGameLogic::CGameLogic(void)
 : playing(0)
@@ -28,12 +33,14 @@ SDL_Surface* CGameLogic::load_image(string filename)
 	SDL_Surface* loadedImage = NULL;
 	SDL_Surface* optimizedImage = NULL;
 
-	loadedImage = IMG_Load(filename.c_str());
+	string target = "img/" + CGame::SpriteList[filename];
+
+	loadedImage = IMG_Load(target.c_str());
 
 	 //If nothing went wrong in loading the image
 	if( loadedImage != NULL ) { 
 		//Create an optimized image 
-		optimizedImage = SDL_DisplayFormat( loadedImage ); 
+		optimizedImage = SDL_DisplayFormatAlpha( loadedImage ); 
 		//Free the old image 
 		SDL_FreeSurface( loadedImage ); 
 	}
@@ -63,36 +70,52 @@ int CGameLogic::InitGame(void)
 	indata.open("cfg/config.cfg");
 
 	if (!indata)
-		return 0;
+	{
+		//TODO: Less hardcode. Just around the write area, mostly.
+		ofstream defaults ("cfg/config.cfg", ofstream::binary);
+		const char *defaulted = "640 480 32";
+		defaults.write(defaulted, 10);
+		defaults.close();
 
-	int width, height, bpp;
-	int config[3];
+		ScreenWidth = 640;
+		ScreenHeight = 480;
 
-	indata >> width >> height >> bpp;
+		screen = SDL_SetVideoMode( 640, 480, 32, SDL_SWSURFACE );
+	}
+	else
+	{
+		int width, height, bpp;
+		int config[3];
 
-	config[WIDTH] = width;
-	config[HEIGHT] = height;
-	config[BPP] = bpp;
+		indata >> width >> height >> bpp;
 
-	screen = SDL_SetVideoMode( config[WIDTH], config[HEIGHT], config[BPP], SDL_SWSURFACE );
+		config[WIDTH] = width;
+		config[HEIGHT] = height;
+		config[BPP] = bpp;
 
+		ScreenWidth = width;
+		ScreenHeight = height;
+
+		screen = SDL_SetVideoMode( config[WIDTH], config[HEIGHT], config[BPP], SDL_SWSURFACE );
+		indata.close();
+	}
 	 //Set the window caption 
 	SDL_WM_SetCaption( "Omar Staying", NULL );
-
-	indata.close();
 
 	if (!CMusic::LoadSongs())
 		return 0;
 
-	if (!CGame::LoadAirhorns())
+	if (!CGame::LoadImages())
 		return 0;
 
 	return 1;
 }
+
 void CGameLogic::CleanUp(void)
 {
-	 //Free the image 
+	CGame::FreeImages();
 	SDL_FreeSurface( screen ); 
+
 	//Quit SDL 
 	SDL_Quit(); 
 }
