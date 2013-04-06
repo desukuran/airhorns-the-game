@@ -37,7 +37,6 @@ Timer logos;
 	SDL_Surface *CGame::logo1;
 	SDL_Surface *CGame::logo2;
 	int CGame::gamestate;
-	int CGame::logonumber;
 	int CGame::logoframe;
 
 CGame::CGame(void)
@@ -71,15 +70,6 @@ CGame::CGame(void)
 
 		if( (keys[SDLK_RETURN]) && (gamestate == STATE_LOGO) )
 			CGame::SetGameState(STATE_TITLE);
-
-		 if( keys[SDLK_UP] )
-			CMusic::PlaySong("Ayla", true, false);
-
-		 if( keys[SDLK_DOWN] )
-		 {
-			AirHornOn();
-			CMusic::PlaySong("Airhorn", false, false);
-		 }
 	 }
 }
 
@@ -89,8 +79,8 @@ CGame::~CGame(void)
 
 int CGame::IntRand()
 {
-	//The Seed is really terrible
-	srand(time(NULL));
+	//TODO: The Seed is really terrible
+	srand(time(0));
 	return rand()%255;
 }
 
@@ -144,6 +134,8 @@ int CGame::FreeImages()
 	SDL_FreeSurface(title_logo);
 	SDL_FreeSurface(airhorn_off);
 	SDL_FreeSurface(airhorn);
+	SDL_FreeSurface(logo1);
+	SDL_FreeSurface(logo2);
 	return 1;
 }
 
@@ -155,27 +147,10 @@ void CGame::Render()
 	}
 	if (gamestate == STATE_TITLE)
 	{
-		//Draw the airhorn
-		CGameLogic::Draw( 0, 0, airhorn_off, CGameLogic::screen );
-
-		CGameLogic::Draw(CGameLogic::ScreenWidth/2, CGameLogic::ScreenHeight/2, title_logo, CGameLogic::screen );
+		CGame::DrawTitle();
 	}
+	CGameLogic::DrawText(CGameLogic::screen, "Demo Version",(CGameLogic::ScreenWidth-120), 10, 156, 8, 8, false);
 	RegulateFrameRate();
-}
-
-void CGame::DrawLogos()
-{
-	//TODO: Fade in between and such
-		SDL_FillRect(CGameLogic::screen,NULL, SDL_MapRGB(SDL_GetVideoSurface()->format,0xFF,0xFF,0xFF)); 
-
-		if (logoframe < 240)		
-		CGameLogic::Draw( (CGameLogic::ScreenWidth/2)-(logo1->w/2), (CGameLogic::ScreenHeight/2)-(logo1->h/2), logo1, CGameLogic::screen );
-		else if (logoframe < 480)
-		CGameLogic::Draw( (CGameLogic::ScreenWidth/2)-(logo2->w/2), (CGameLogic::ScreenHeight/2)-(logo2->h/2), logo2, CGameLogic::screen );
-		else if (logoframe > 480)
-		SetGameState(STATE_TITLE);
-
-		logoframe++;
 }
 
 void CGame::RegulateFrameRate()
@@ -204,4 +179,26 @@ void CGame::flip()
 {
  //Update Screen 
 	SDL_Flip( CGameLogic::screen );
+}
+
+void CGame::DrawLogos()
+{
+	//TODO: Fade in between and such
+		SDL_FillRect(CGameLogic::screen,NULL, SDL_MapRGB(SDL_GetVideoSurface()->format,0xFF,0xFF,0xFF)); 
+
+		if (logoframe < 240)
+			CGameLogic::Draw( (CGameLogic::ScreenWidth/2)-(logo1->w/2), (CGameLogic::ScreenHeight/2)-(logo1->h/2), logo1, CGameLogic::screen );
+		else if (logoframe < 480)
+			CGameLogic::Draw( (CGameLogic::ScreenWidth/2)-(logo2->w/2), (CGameLogic::ScreenHeight/2)-(logo2->h/2), logo2, CGameLogic::screen );
+		else if (logoframe > 480)
+			SetGameState(STATE_TITLE);
+
+		logoframe++;
+}
+
+void CGame::DrawTitle()
+{
+	SDL_FillRect(CGameLogic::screen,NULL, SDL_MapRGB(SDL_GetVideoSurface()->format,0x00,0x00,0x00)); 
+	CGameLogic::Draw( (CGameLogic::ScreenWidth/2)-(title_logo->w/2), (title_logo->h/1.5), title_logo, CGameLogic::screen );
+	CGameLogic::DrawText(CGameLogic::screen, "(C) 2013 - Buff Drinklots. There is no copyright.", 0, (CGameLogic::ScreenHeight-25), 255, 255, 255, true);
 }
