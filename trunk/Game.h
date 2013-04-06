@@ -2,6 +2,7 @@
 
 #include "SDL.h"
 #include "SDL_image.h"
+#include "SDL_ttf.h"
 #include <fstream>
 #include <map>
 
@@ -39,6 +40,7 @@ public:
 
 
 	static void DrawLogos();
+	static void DrawTitle();
 
 	//Logical Functions, mainly math
 	static int IntRand();
@@ -55,12 +57,12 @@ public:
 	static SDL_Surface *logo1;
 	static SDL_Surface *logo2;
 
+	static SDL_Surface *betatext;
+
 
 private:
-	void DrawTitle();
-
 	static int gamestate;
-
-	static int logonumber;
 	static int logoframe;
+
+	static int logoheight;
 };

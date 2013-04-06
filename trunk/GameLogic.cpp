@@ -9,6 +9,7 @@ using namespace std;
 
 //Resolve Extrernal whatever
 SDL_Surface* CGameLogic::screen = NULL;
+TTF_Font *CGameLogic::font;
 int CGameLogic::ScreenHeight;
 int CGameLogic::ScreenWidth;
 
@@ -60,11 +61,30 @@ void CGameLogic::Draw(int x, int y, SDL_Surface* source, SDL_Surface* destinatio
 	 SDL_BlitSurface( source, NULL, destination, &offset );
 }
 
+void CGameLogic::DrawText(SDL_Surface* screen, string text, Sint16 x, Sint16 y, Uint8 red, Uint8 green, Uint8 blue, bool center)
+{
+	SDL_Color color = {red, green, blue};
+	SDL_Surface* surface = TTF_RenderText_Blended(font, text.c_str(), color);
+	SDL_Rect rect;
+
+	if (!center)
+		rect.x = x;
+	else
+		rect.x = ((CGameLogic::ScreenWidth/2)-(surface->w/2));
+
+	rect.y = y;
+
+	SDL_BlitSurface(surface, NULL, screen, &rect);
+    SDL_FreeSurface(surface);
+}
+
 int CGameLogic::InitGame(void)
 {
 	ifstream indata;
 	
 	if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
+		return 0;
+	if (TTF_Init() == -1)
 		return 0;
 	
 	indata.open("cfg/config.cfg");
@@ -102,6 +122,14 @@ int CGameLogic::InitGame(void)
 	 //Set the window caption 
 	SDL_WM_SetCaption( "Omar Staying", NULL );
 
+	font = TTF_OpenFont("cfg/font.ttf", 16);
+
+	if (!font)
+	{
+		printf(SDL_GetError());
+		return 0;
+	}
+
 	if (!CMusic::LoadSongs())
 		return 0;
 
@@ -114,6 +142,7 @@ int CGameLogic::InitGame(void)
 void CGameLogic::CleanUp(void)
 {
 	CGame::FreeImages();
+	TTF_CloseFont(font);
 	SDL_FreeSurface( screen ); 
 
 	//Quit SDL 
