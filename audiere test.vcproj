@@ -220,6 +220,14 @@
 				RelativePath=".\Timer.h"
 				>
 			</File>
+			<Filter
+				Name="Configuration"
+				>
+				<File
+					RelativePath=".\config.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"

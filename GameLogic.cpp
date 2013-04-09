@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <ostream>
+#include "config.h"
 
 #include "SDL.h"
 
@@ -78,6 +79,48 @@ void CGameLogic::DrawText(SDL_Surface* screen, string text, Sint16 x, Sint16 y, 
     SDL_FreeSurface(surface);
 }
 
+void CGameLogic::DrawProgressiveText(SDL_Surface* screen, string text, Sint16 x, Sint16 y, Uint8 red, Uint8 green, Uint8 blue, bool center)
+{
+	//Currently Broken. For now, I am gonna make it call DrawText
+	//TODO: Fix.
+
+	CGameLogic::DrawText( screen, text, x, y, red, green, blue, center);
+
+	/*string text1;
+	string text2 = text;
+	size_t goal = text2.length();
+
+		text1 += text2[0];
+		text2.erase(1,0);
+
+		SDL_Color color = {red, green, blue};
+		SDL_Surface* surface = TTF_RenderText_Blended(font, text1.c_str(), color);
+		SDL_Rect rect;
+
+		if (!center)
+			rect.x = x;
+		else
+			rect.x = ((CGameLogic::ScreenWidth/2)-(surface->w/2));
+
+		rect.y = y;
+
+		SDL_BlitSurface(surface, NULL, screen, &rect);
+		SDL_FreeSurface(surface);
+		SDL_Delay(1000);*/
+}
+
+void CGameLogic::DrawBackground(SDL_Surface* screen, Uint8 red, Uint8 green, Uint8 blue)
+{
+	SDL_FillRect(screen,NULL, SDL_MapRGB(SDL_GetVideoSurface()->format,red,green,blue)); 
+}
+
+void CGameLogic::MessageBox(SDL_Surface* screen, string name, string msg)
+{
+	//TODO: Name. Too Lazy.
+	CGameLogic::Draw((CGameLogic::ScreenWidth/2)-(CGameLogic::messagebox->w/2), (CGameLogic::ScreenHeight-CGameLogic::messagebox->h)-(CGameLogic::messagebox->h/32), CGameLogic::messagebox, CGameLogic::screen);
+	CGameLogic::DrawText(CGameLogic::screen, msg, (CGameLogic::ScreenWidth/2)-(CGameLogic::messagebox->w/2)+(CGameLogic::messagebox->w/32), (CGameLogic::ScreenHeight)-(CGameLogic::messagebox->h)+(CGameLogic::messagebox->h/32), 0xFF, 0xFF, 0xFF, false);
+}
+
 int CGameLogic::InitGame(void)
 {
 	ifstream indata;
@@ -93,14 +136,16 @@ int CGameLogic::InitGame(void)
 	{
 		//TODO: Less hardcode. Just around the write area, mostly.
 		ofstream defaults ("cfg/config.cfg", ofstream::binary);
-		const char *defaulted = "640 480 32";
-		defaults.write(defaulted, 10);
+		char defaulted[32] = "";
+		sprintf(defaulted, "%i %i 32", CConfig::defaultWidth, CConfig::defaultHeight);
+		printf(defaulted);
+		defaults.write(defaulted, sizeof(defaulted));
 		defaults.close();
 
-		ScreenWidth = 640;
-		ScreenHeight = 480;
+		CGameLogic::ScreenWidth = CConfig::defaultWidth;
+		CGameLogic::ScreenHeight = CConfig::defaultHeight;
 
-		screen = SDL_SetVideoMode( 640, 480, 32, SDL_SWSURFACE );
+		screen = SDL_SetVideoMode( CGameLogic::ScreenWidth, CGameLogic::ScreenHeight, 32, SDL_SWSURFACE );
 	}
 	else
 	{
