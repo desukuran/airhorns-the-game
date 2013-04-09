@@ -14,6 +14,7 @@
 #include "GameLogic.h"
 #include "Music.h"
 #include "Game.h"
+#include "DebugMessage.h"
 
 #include "SDL.h"
 #include "SDL_image.h"
@@ -21,6 +22,8 @@
 
 using namespace audiere;
 using namespace std;
+
+	bool CDebugMessage::debugOn;
 
 int main(int argc, char* argv[])
 {
@@ -37,7 +40,10 @@ int main(int argc, char* argv[])
 
 	while(main::game)
 	{
-		CGame::CGame();
+		//if (CDebugMessage::debugOn)
+			CDebugMessage::Draw();
+
+		CGame::Think();
 		CGame::Render();
 		CGame::flip();
 	}

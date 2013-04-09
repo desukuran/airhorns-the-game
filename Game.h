@@ -33,6 +33,7 @@ public:
 	static int LoadImages();
 	static int FreeImages();
 
+	static void Think();
 	static void Render();
 	static void RegulateFrameRate();
 
@@ -46,7 +47,7 @@ public:
 	static int IntRand();
 
 	//Variables sit over here.
-	SDL_Event GameEvent;
+	static SDL_Event GameEvent;
 
 	static map<string, string> SpriteList;
 

@@ -4,6 +4,7 @@
 #include "Music.h"
 #include "Timer.h"
 #include "config.h"
+#include "DebugMessage.h"
 
 #include <ctime>
 
@@ -39,42 +40,14 @@ Timer logos;
 	SDL_Surface *CGame::logo2;
 	SDL_Surface *CGameLogic::messagebox;
 
+	SDL_Event CGame::GameEvent;
+
 	int CGame::gamestate;
 	int CGame::logoframe;
 	string CGameLogic::message;
 
 CGame::CGame(void)
 {	
-	 while( SDL_PollEvent( &GameEvent ) ) 
-	 {
-		  //If the user has Xed out the window 
-		 if( GameEvent.type == SDL_QUIT ) 
-		 { 
-			 //Quit the program 
-			 main::game = false; 
-		 } 
-
-        if(GameEvent.type == SDL_KEYDOWN)
-        {
-			if (!konami)
-			{
-				if(GameEvent.key.keysym.sym == keyz[konamiindex])
-				{
-					konamiindex++;
-					if (konamiindex == keyzl)
-					{
-						CMusic::PlaySong("Konami", false, false);          
-						konami = 1;
-					}
-				}
-				else
-					konamiindex = 0;    
-			}
-		}
-
-		if( (keys[SDLK_RETURN]) && (gamestate == STATE_LOGO) )
-			CGame::SetGameState(STATE_TITLE);
-	 }
 }
 
 CGame::~CGame(void)
@@ -88,11 +61,61 @@ int CGame::IntRand()
 	return rand()%255;
 }
 
+void CGame::Think()
+{
+	while( SDL_PollEvent( &GameEvent ) ) 
+	 {
+		  //If the user has Xed out the window 
+		 if( GameEvent.type == SDL_QUIT ) 
+		 { 
+			 //Quit the program 
+			 main::game = false; 
+		 } 
+
+		if(gamestate == STATE_LOGO)
+		{
+			if(keys[SDLK_RETURN])
+				CGame::SetGameState(STATE_TITLE);
+		}
+		else if (gamestate == STATE_TITLE)
+		{
+			if(GameEvent.type == SDL_KEYDOWN)
+			{
+				if (!konami)
+				{
+					if(GameEvent.key.keysym.sym == keyz[konamiindex])
+					{
+						konamiindex++;
+						if (konamiindex == keyzl)
+						{
+							CMusic::PlaySong("Konami", false, false);          
+							konami = 1;
+						}
+					}
+					else
+						konamiindex = 0;    
+				}
+				if (keys[SDLK_RETURN])
+				{
+					CDebugMessage::AddMessage("ERROR: TEST");
+				}
+			}
+			//if(keys[SDLK_RETURN])
+			//{
+			//	
+			//}
+		}
+	 }
+}
+
 void CGame::SetGameState(int state)
 {
 	//TODO: Time for some Hardcoded Drama
 	if (state == STATE_TITLE)
+	{
+		CDebugMessage::AddMessage("Loaded Title");
 		CMusic::PlaySong("Title", true, false);
+	}
 
 	gamestate = state;
 }
