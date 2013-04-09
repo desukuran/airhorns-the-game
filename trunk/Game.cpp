@@ -3,6 +3,7 @@
 #include "main.h"
 #include "Music.h"
 #include "Timer.h"
+#include "config.h"
 
 #include <ctime>
 
@@ -36,8 +37,11 @@ Timer logos;
 	SDL_Surface *CGame::title_logo;
 	SDL_Surface *CGame::logo1;
 	SDL_Surface *CGame::logo2;
+	SDL_Surface *CGameLogic::messagebox;
+
 	int CGame::gamestate;
 	int CGame::logoframe;
+	string CGameLogic::message;
 
 CGame::CGame(void)
 {	
@@ -116,12 +120,13 @@ int CGame::LoadImages()
 
 	file.close();
 
-	//TODO: SDL_Surfaces that create themselves.
+	//TODO: SDL_Surfaces that create themselves. UPDATE: May not even need this.
 	title_logo = CGameLogic::load_image("Title");
 	airhorn_off = CGameLogic::load_image("AirhornOff");
 	airhorn = CGameLogic::load_image("Airhorn");
 	logo1 = CGameLogic::load_image("Logo1");
 	logo2 = CGameLogic::load_image("Logo2");
+	CGameLogic::messagebox = CGameLogic::load_image("MessageBox");
 
 	if ((!airhorn_off) || (!airhorn) || (!title_logo) || (!logo1) || (!logo2))
 		return 0;
@@ -145,11 +150,14 @@ void CGame::Render()
 	{
 		CGame::DrawLogos();
 	}
-	if (gamestate == STATE_TITLE)
+	else if (gamestate == STATE_TITLE)
 	{
 		CGame::DrawTitle();
 	}
+
+	if (CConfig::preRelease)
 	CGameLogic::DrawText(CGameLogic::screen, "Demo Version",(CGameLogic::ScreenWidth-120), 10, 156, 8, 8, false);
+
 	RegulateFrameRate();
 }
 
@@ -177,14 +185,14 @@ void CGame::AirHornOn()
 
 void CGame::flip()
 {
- //Update Screen 
+	//Update Screen 
 	SDL_Flip( CGameLogic::screen );
 }
 
 void CGame::DrawLogos()
 {
 	//TODO: Fade in between and such
-		SDL_FillRect(CGameLogic::screen,NULL, SDL_MapRGB(SDL_GetVideoSurface()->format,0xFF,0xFF,0xFF)); 
+		CGameLogic::DrawBackground(CGameLogic::screen, 255, 255, 255);
 
 		if (logoframe < 240)
 			CGameLogic::Draw( (CGameLogic::ScreenWidth/2)-(logo1->w/2), (CGameLogic::ScreenHeight/2)-(logo1->h/2), logo1, CGameLogic::screen );
@@ -198,7 +206,14 @@ void CGame::DrawLogos()
 
 void CGame::DrawTitle()
 {
-	SDL_FillRect(CGameLogic::screen,NULL, SDL_MapRGB(SDL_GetVideoSurface()->format,0x00,0x00,0x00)); 
+	CGameLogic::DrawBackground(CGameLogic::screen, 0, 0, 0);
 	CGameLogic::Draw( (CGameLogic::ScreenWidth/2)-(title_logo->w/2), (title_logo->h/1.5), title_logo, CGameLogic::screen );
+	CGameLogic::DrawProgressiveText(CGameLogic::screen, "You've met with a terrible fate, haven't you?", 0, (CGameLogic::ScreenHeight/2), 255, 255, 255, true);
+	CGameLogic::DrawText(CGameLogic::screen, "The Legend of", 0, 32, 255, 255, 255, true);
 	CGameLogic::DrawText(CGameLogic::screen, "(C) 2013 - Buff Drinklots. There is no copyright.", 0, (CGameLogic::ScreenHeight-25), 255, 255, 255, true);
+
+	/*CGameLogic::message = "You're a petite little thing";
+
+	if (CGameLogic::message != "")
+		CGameLogic::MessageBox(CGameLogic::screen, "NAM", CGameLogic::message);*/
 }
