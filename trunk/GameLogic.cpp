@@ -3,6 +3,7 @@
 #include <fstream>
 #include <ostream>
 #include "config.h"
+#include "DebugMessage.h"
 
 #include "SDL.h"
 
@@ -46,6 +47,8 @@ SDL_Surface* CGameLogic::load_image(string filename)
 		//Free the old image 
 		SDL_FreeSurface( loadedImage ); 
 	}
+	else
+		CDebugMessage::AddMessage("IMAGE: Cannot load " + filename);
 
 	return optimizedImage;
 }

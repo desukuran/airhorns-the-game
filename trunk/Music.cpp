@@ -1,6 +1,7 @@
 #include "Music.h"
 #include <string>
 #include "audiere.h"
+#include "DebugMessage.h"
 
 map<string, string> CMusic::MusicList;
 AudioDevicePtr CMusic::device;
@@ -48,6 +49,11 @@ int CMusic::PlaySong(string songname, bool loop, bool rand_pitch)
 	device = OpenDevice();
 	sound = OpenSound(device, songpath.c_str(), false);
       
+	if (!sound) {
+		CDebugMessage::AddMessage("Music: Cannot open "+songname);
+		return 0;
+	}
+
 	if (rand_pitch)
 		sound->setPitchShift(CGame::IntRand()%5);
 	else

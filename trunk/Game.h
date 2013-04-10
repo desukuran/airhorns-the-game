@@ -64,6 +64,7 @@ public:
 private:
 	static int gamestate;
 	static int logoframe;
+	static int fadeAmount;
 
 	static int logoheight;
 };
