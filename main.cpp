@@ -40,11 +40,9 @@ int main(int argc, char* argv[])
 
 	while(main::game)
 	{
-		//if (CDebugMessage::debugOn)
-			CDebugMessage::Draw();
-
 		CGame::Think();
 		CGame::Render();
+		CDebugMessage::Draw();
 		CGame::flip();
 	}
 

@@ -5,6 +5,7 @@
 #include "Timer.h"
 #include "config.h"
 #include "DebugMessage.h"
+#include "GameMenu.h"
 
 #include <ctime>
 
@@ -113,8 +114,15 @@ void CGame::SetGameState(int state)
 	//TODO: Time for some Hardcoded Drama
 	if (state == STATE_TITLE)
 	{
-		CDebugMessage::AddMessage("Loaded Title");
+		if (CConfig::debugFlag)
+			CDebugMessage::AddMessage("DEBUG: Loaded Title");
 		CMusic::PlaySong("Title", true, false);
+		std::string menu[MENU_MAX];
+		menu[0] = "New Game";
+		menu[1] = "Continue";
+		menu[2] = "Option";
+		menu[3] = "Exit";
+		CGameMenu::CGameMenu(menu);
 	}
 
 	gamestate = state;
@@ -176,6 +184,7 @@ void CGame::Render()
 	else if (gamestate == STATE_TITLE)
 	{
 		CGame::DrawTitle();
+		CGameMenu::Draw();
 	}
 
 	if (CConfig::preRelease)

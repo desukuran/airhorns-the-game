@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "GameLogic.h"
 
 #define MENU_MAX 5
 
@@ -10,5 +11,11 @@ public:
 	CGameMenu(std::string menu[]);
 	~CGameMenu(void);
 
-	static std::string choice[32][MENU_MAX];
+	static void Draw();
+
+	//Variables
+	static SDL_Surface *menuTex;
+	static SDL_Surface *curTex;
+	static int cursorIndex;
+	static std::string choice[MENU_MAX];
 };
