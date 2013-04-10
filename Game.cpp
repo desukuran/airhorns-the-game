@@ -96,11 +96,17 @@ void CGame::Think()
 					else
 						konamiindex = 0;    
 				}
+			}
 				if (keys[SDLK_RETURN])
 				{
-					CDebugMessage::AddMessage("ERROR: TEST");
+					switch (CGameMenu::menuDecision())
+					{
+						case 0: CGame::SetGameState(STATE_GAME);break;
+						case 1: CGame::SetGameState(STATE_GAME);break;
+						case 2: CGame::SetGameState(STATE_GAME);break;
+						case 3: main::game = 0;break;
+					}
 				}
-			}
 			//if(keys[SDLK_RETURN])
 			//{
 			//	
@@ -122,7 +128,11 @@ void CGame::SetGameState(int state)
 		menu[1] = "Continue";
 		menu[2] = "Option";
 		menu[3] = "Exit";
-		CGameMenu::CGameMenu(menu);
+		CGameMenu::CGameMenu(menu, 4);
+	}
+	else if (state == STATE_GAME)
+	{
+		CMusic::PlaySong("Game", true, false);
 	}
 
 	gamestate = state;
@@ -185,6 +195,7 @@ void CGame::Render()
 	{
 		CGame::DrawTitle();
 		CGameMenu::Draw();
+		CGameMenu::Think();
 	}
 
 	if (CConfig::preRelease)

@@ -1,21 +1,27 @@
 #include "GameMenu.h"
+#include "SDL.h"
 
 int CGameMenu::cursorIndex;
 SDL_Surface *CGameMenu::curTex;
 SDL_Surface *CGameMenu::menuTex;
 std::string CGameMenu::choice[MENU_MAX];
+int CGameMenu::currentMax;
 
-CGameMenu::CGameMenu(std::string choices [])
+CGameMenu::CGameMenu(std::string choices [], int choiceCount)
 {
-
 	curTex = CGameLogic::load_image("Cursor");
 	menuTex = CGameLogic::load_image("Menu");
 	int max;
 
-	if (choices->size() < MENU_MAX)
-		max = choices->size();
+	if (choiceCount-1 < MENU_MAX)
+	{
+		currentMax = choiceCount-1;
+		max = choiceCount-1;
+	}
 	else
+		currentMax = MENU_MAX;
 		max = MENU_MAX;
+
 	for (int i=0;i<max;i++)
 		choice[i].swap(choices[i]);
 }
@@ -37,7 +43,31 @@ void CGameMenu::Draw()
 	CGameLogic::Draw((CGameLogic::ScreenWidth/2)-(menuTex->w/2), (CGameLogic::ScreenHeight)-(menuTex->h)-(menuTex->h/8)+(menuTex->h/16)+(cursorIndex*32), curTex, CGameLogic::screen);
 }
 
-/*void CGameMenu::Think()
+void CGameMenu::Think()
 {
-	//TODO: Cursor logic.
-}*/
+	Uint8 *keystate = SDL_GetKeyState(NULL);
+
+		 if(keystate[SDLK_UP])
+			 CGameMenu::CursorMove(CUR_UP);
+		 else if (keystate[SDLK_DOWN])
+			 CGameMenu::CursorMove(CUR_DOWN);
+}
+
+void CGameMenu::CursorMove(int direction)
+{
+	CMusic::PlaySong("Cursor", false, false);
+	if (direction == CUR_UP)
+		cursorIndex -= 1;
+	else if (direction == CUR_DOWN)
+		cursorIndex += 1;
+
+	if (cursorIndex < 0)
+		cursorIndex = currentMax;
+	else if (cursorIndex > currentMax)
+		cursorIndex = 0;
+}
+
+int CGameMenu::menuDecision()
+{
+	return cursorIndex;
+}
