@@ -60,8 +60,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="audiere.lib"
-				LinkIncremental="2"
+				AdditionalDependencies="audiere.lib SDLmain.lib SDL.lib SDL_image.lib SDL_ttf.lib"
+				Version="0.1aDEBUG"
+				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -199,6 +200,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Sound.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Timer.cpp"
 				>
 			</File>
@@ -230,6 +235,10 @@
 			</File>
 			<File
 				RelativePath=".\Music.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Sound.h"
 				>
 			</File>
 			<File

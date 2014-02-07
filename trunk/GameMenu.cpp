@@ -55,7 +55,7 @@ void CGameMenu::Think()
 
 void CGameMenu::CursorMove(int direction)
 {
-	CMusic::PlaySong("Cursor", false, false);
+	CSound::PlaySound("Cursor", false);
 	if (direction == CUR_UP)
 		cursorIndex -= 1;
 	else if (direction == CUR_DOWN)

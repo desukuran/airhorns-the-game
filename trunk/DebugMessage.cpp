@@ -19,8 +19,8 @@ void CDebugMessage::AddMessage(std::string msg)
 			debugMessage[i].swap(debugMessage[i-1]);
 	}
 
-		if (msg.size() > 32)
-		msg.resize(32);
+		if (msg.size() > 64)
+		msg.resize(64);
 
 		debugMessage[0].swap(msg);
 
