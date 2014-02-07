@@ -3,6 +3,7 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "Music.h"
+#include "Sound.h"
 
 enum { WIDTH, HEIGHT, BPP };
 

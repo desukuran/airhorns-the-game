@@ -48,7 +48,7 @@ SDL_Surface* CGameLogic::load_image(string filename)
 		SDL_FreeSurface( loadedImage ); 
 	}
 	else
-		CDebugMessage::AddMessage("IMAGE: Cannot load " + filename);
+		CDebugMessage::AddMessage("IMAGE: Cannot load \"" + filename + "\"");
 
 	return optimizedImage;
 }
@@ -155,14 +155,37 @@ int CGameLogic::InitGame(void)
 		int width, height, bpp;
 		int config[3];
 
+		bool malform = false;
+
 		indata >> width >> height >> bpp;
 
 		config[WIDTH] = width;
 		config[HEIGHT] = height;
 		config[BPP] = bpp;
 
-		ScreenWidth = width;
-		ScreenHeight = height;
+		if (config[WIDTH] < 0)
+		{
+			malform = true;
+			config[WIDTH] = CConfig::defaultWidth;
+		}
+
+		if (config[HEIGHT] < 0)
+		{
+			malform = true;
+			config[HEIGHT] = CConfig::defaultHeight;
+		}
+
+		if (config[BPP] < 0)
+		{
+			malform = true;
+			config[BPP] = 32;
+		}
+
+		if (malform)
+			CDebugMessage::AddMessage("WARNING: Config is malformed. Loading Default Values.");
+
+		CGameLogic::ScreenWidth = config[WIDTH];
+		CGameLogic::ScreenHeight = config[HEIGHT];
 
 		screen = SDL_SetVideoMode( config[WIDTH], config[HEIGHT], config[BPP], SDL_SWSURFACE );
 		indata.close();
@@ -179,6 +202,9 @@ int CGameLogic::InitGame(void)
 	}
 
 	if (!CMusic::LoadSongs())
+		return 0;
+
+	if (!CSound::LoadSounds())
 		return 0;
 
 	if (!CGame::LoadImages())

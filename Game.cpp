@@ -132,6 +132,7 @@ void CGame::SetGameState(int state)
 	}
 	else if (state == STATE_GAME)
 	{
+		CDebugMessage::AddMessage("DEBUG: Loaded Game.");
 		CMusic::PlaySong("Game", true, false);
 	}
 
@@ -196,6 +197,10 @@ void CGame::Render()
 		CGame::DrawTitle();
 		CGameMenu::Draw();
 		CGameMenu::Think();
+	}
+	else if (gamestate == STATE_GAME)
+	{
+		CGameLogic::DrawBackground(CGameLogic::screen, 0, 25, 0);
 	}
 
 	if (CConfig::preRelease)

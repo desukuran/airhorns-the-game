@@ -13,8 +13,10 @@
 
 #include "GameLogic.h"
 #include "Music.h"
+#include "Sound.h"
 #include "Game.h"
 #include "DebugMessage.h"
+#include "config.h"
 
 #include "SDL.h"
 #include "SDL_image.h"
@@ -36,7 +38,10 @@ int main(int argc, char* argv[])
 
 	//If we reached this point, time to start the loop
 	main::game = 1;
-	CGame::SetGameState(STATE_LOGO);
+	if (CConfig::skiptitleFlag == 1)
+		CGame::SetGameState(STATE_GAME);
+	else
+		CGame::SetGameState(STATE_LOGO);
 
 	while(main::game)
 	{
