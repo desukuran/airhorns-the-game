@@ -6,6 +6,7 @@
 #include "config.h"
 #include "DebugMessage.h"
 #include "GameMenu.h"
+#include "Player.h"
 
 #include <ctime>
 
@@ -29,6 +30,8 @@ bool cap = true;
 Timer fps;
 Timer logos;
 
+CPlayer playerEnt;
+
 // Gain access to keystate array
    Uint8 *keys = SDL_GetKeyState(NULL);
 
@@ -42,9 +45,11 @@ Timer logos;
 	SDL_Surface *CGameLogic::messagebox;
 
 	SDL_Event CGame::GameEvent;
+	SDL_Surface *CPlayer::player_sprite;
 
 	int CGame::gamestate;
 	int CGame::logoframe;
+
 	string CGameLogic::message;
 
 CGame::CGame(void)
@@ -58,7 +63,7 @@ CGame::~CGame(void)
 int CGame::IntRand()
 {
 	//TODO: The Seed is really terrible
-	srand(time(0));
+	srand(time(NULL));
 	return rand()%255;
 }
 
@@ -107,12 +112,12 @@ void CGame::Think()
 						case 3: main::game = 0;break;
 					}
 				}
-			//if(keys[SDLK_RETURN])
-			//{
-			//	
-			//}
+			}
+		else if (gamestate == STATE_GAME)
+		{
+			playerEnt.Think();
 		}
-	 }
+	}
 }
 
 void CGame::SetGameState(int state)
@@ -133,7 +138,8 @@ void CGame::SetGameState(int state)
 	else if (state == STATE_GAME)
 	{
 		CDebugMessage::AddMessage("DEBUG: Loaded Game.");
-		CMusic::PlaySong("Game", true, false);
+		//CMusic::PlaySong("Game", true, false);
+		//playerEnt.Think();
 	}
 
 	gamestate = state;
@@ -169,6 +175,7 @@ int CGame::LoadImages()
 	logo1 = CGameLogic::load_image("Logo1");
 	logo2 = CGameLogic::load_image("Logo2");
 	CGameLogic::messagebox = CGameLogic::load_image("MessageBox");
+	CPlayer::player_sprite = CGameLogic::load_image("player");
 
 	if ((!airhorn_off) || (!airhorn) || (!title_logo) || (!logo1) || (!logo2))
 		return 0;
@@ -201,6 +208,7 @@ void CGame::Render()
 	else if (gamestate == STATE_GAME)
 	{
 		CGameLogic::DrawBackground(CGameLogic::screen, 0, 25, 0);
+		playerEnt.Draw();
 	}
 
 	if (CConfig::preRelease)

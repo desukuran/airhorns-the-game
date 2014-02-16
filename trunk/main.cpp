@@ -38,6 +38,7 @@ int main(int argc, char* argv[])
 
 	//If we reached this point, time to start the loop
 	main::game = 1;
+
 	if (CConfig::skiptitleFlag == 1)
 		CGame::SetGameState(STATE_GAME);
 	else

@@ -5,6 +5,7 @@
 #include "SDL_ttf.h"
 #include <fstream>
 #include <map>
+#include "player.h"
 
 using namespace std;
 
@@ -59,7 +60,11 @@ public:
 	static SDL_Surface *logo1;
 	static SDL_Surface *logo2;
 
+	static SDL_Surface *player_sprite;
+
 	static SDL_Surface *betatext;
+
+	//CPlayer playerEnt;
 
 
 private:
