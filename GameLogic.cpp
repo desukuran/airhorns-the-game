@@ -190,8 +190,16 @@ int CGameLogic::InitGame(void)
 		screen = SDL_SetVideoMode( config[WIDTH], config[HEIGHT], config[BPP], SDL_SWSURFACE );
 		indata.close();
 	}
+
+	string time(__TIME__);
+	string date(__DATE__);
+
+	char title_char [256];
+
+	sprintf(title_char, "Omar Staying %d %d", time.c_str(), date.c_str());
+
 	 //Set the window caption 
-	SDL_WM_SetCaption( "Omar Staying", NULL );
+	SDL_WM_SetCaption( title_char, NULL );
 
 	font = TTF_OpenFont("cfg/font.ttf", 16);
 

@@ -64,6 +64,7 @@
 				Version="0.1aDEBUG"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
+				GenerateMapFile="true"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -200,6 +201,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Player.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Sound.cpp"
 				>
 			</File>
@@ -235,6 +240,10 @@
 			</File>
 			<File
 				RelativePath=".\Music.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Player.h"
 				>
 			</File>
 			<File

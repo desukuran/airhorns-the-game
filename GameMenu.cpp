@@ -19,9 +19,10 @@ CGameMenu::CGameMenu(std::string choices [], int choiceCount)
 		max = choiceCount-1;
 	}
 	else
+	{
 		currentMax = MENU_MAX;
 		max = MENU_MAX;
-
+	}
 	for (int i=0;i<max;i++)
 		choice[i].swap(choices[i]);
 }
