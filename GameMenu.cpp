@@ -13,10 +13,10 @@ CGameMenu::CGameMenu(std::string choices [], int choiceCount)
 	menuTex = CGameLogic::load_image("Menu");
 	int max;
 
-	if (choiceCount-1 < MENU_MAX)
+	if (choiceCount < MENU_MAX)
 	{
-		currentMax = choiceCount-1;
-		max = choiceCount-1;
+		currentMax = choiceCount;
+		max = choiceCount;
 	}
 	else
 	{
@@ -63,8 +63,8 @@ void CGameMenu::CursorMove(int direction)
 		cursorIndex += 1;
 
 	if (cursorIndex < 0)
-		cursorIndex = currentMax;
-	else if (cursorIndex > currentMax)
+		cursorIndex = currentMax-1;
+	else if (cursorIndex > currentMax-1)
 		cursorIndex = 0;
 }
 

@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "GameLogic.h"
+#include "DebugMessage.h"
 
 CPlayer::CPlayer(void)
 {
@@ -18,7 +19,7 @@ void CPlayer::Spawn(void)
 
 void CPlayer::ProcessInput()
 {
-		printf("\nProcessInput\n");
+		//printf("\nProcessInput\n");
 
         //Get the keystates
         Uint8 *keystates = SDL_GetKeyState( NULL );
@@ -49,7 +50,7 @@ void CPlayer::ProcessInput()
 void CPlayer::Think()
 {
 	ProcessInput();
-	CDebugMessage::AddMessage("DEBUG: THINK");
+	//CDebugMessage::AddMessage("DEBUG: THINK");
 	
 	if (movingUp)
 		playery -= 1;

@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 	if (CGameLogic::InitGame())
 		printf("Successfully Inited SDL");
 	else 
-		return 0;
+		return 666;
 
 	//If we reached this point, time to start the loop
 	main::game = 1;

@@ -129,10 +129,16 @@ int CGameLogic::InitGame(void)
 	ifstream indata;
 	
 	if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
-		return 0;
+	{
+		printf("TTF_Init: %s\n", TTF_GetError());
+		return 667;
+	}
 	if (TTF_Init() == -1)
-		return 0;
-	
+	{
+		printf("TTF_Init: %s\n", TTF_GetError());	
+		return 666;
+	}
+
 	indata.open("cfg/config.cfg");
 
 	if (!indata)
