@@ -202,6 +202,8 @@ int CGameLogic::InitGame(void)
 
 	char title_char [256];
 
+	//title_char += cGametitle;
+
 	sprintf(title_char, "Omar Staying %d %d", time.c_str(), date.c_str());
 
 	 //Set the window caption 
