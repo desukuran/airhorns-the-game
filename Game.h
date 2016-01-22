@@ -1,8 +1,8 @@
 #pragma once
 
-#include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_ttf.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL_image.h"
+#include "SDL/SDL_ttf.h"
 #include <fstream>
 #include <map>
 #include "player.h"
@@ -30,47 +30,47 @@ public:
 	~CGame(void);
 
 	//SDL Functions and loading Blips
-	static void flip();
-	static void AirHornOn();
-	static int LoadImages();
-	static int FreeImages();
+	void flip();
+	void AirHornOn();
+	int LoadImages();
+	int FreeImages();
 
-	static void Think();
-	static void Render();
-	static void RegulateFrameRate();
+	void Think();
+	void Render();
+	void RegulateFrameRate();
 
-	static void SetGameState(int state);
+	void SetGameState(int state);
 
 
-	static void DrawLogos();
-	static void DrawTitle();
+	void DrawLogos();
+	void DrawTitle();
 
 	//Logical Functions, mainly math
-	static int IntRand();
+	int IntRand();
 
 	//Variables sit over here.
-	static SDL_Event GameEvent;
+	SDL_Event GameEvent;
 
-	static map<string, string> SpriteList;
+	map<string, string> SpriteList;
 
-	static SDL_Surface *airhorn;
-	static SDL_Surface *airhorn_off;
-	static SDL_Surface *title_logo;
+	SDL_Surface *airhorn;
+	SDL_Surface *airhorn_off;
+	SDL_Surface *title_logo;
 
-	static SDL_Surface *logo1;
-	static SDL_Surface *logo2;
+	SDL_Surface *logo1;
+	SDL_Surface *logo2;
 
-	static SDL_Surface *player_sprite;
+	SDL_Surface *player_sprite;
 
-	static SDL_Surface *betatext;
+	SDL_Surface *betatext;
 
 	//CPlayer playerEnt;
 
 
 private:
-	static int gamestate;
-	static int logoframe;
-	static int fadeAmount;
+	int gamestate;
+	int logoframe;
+	int fadeAmount;
 
-	static int logoheight;
+	int logoheight;
 };

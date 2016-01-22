@@ -1,13 +1,10 @@
 #pragma once
 
 #include <string>
-#include "audiere.h"
+#include "SDL/SDL_mixer.h"
 #include <fstream>
 #include <map>
 #include "Game.h"
-
-using namespace std;
-using namespace audiere;
 
 class CMusic
 {
@@ -20,6 +17,6 @@ public:
 
 	static map<string, string> MusicList;
 
-	static AudioDevicePtr device;
-	static OutputStreamPtr sound;
+	//static AudioDevicePtr device;
+	static Mix_Music *sound;
 };

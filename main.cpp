@@ -7,7 +7,7 @@
 
 
 #include <iostream>
-#include "audiere.h"
+#include "SDL/SDL_mixer.h"
 #include <string>
 #include <cstdio>
 
@@ -18,42 +18,45 @@
 #include "DebugMessage.h"
 #include "config.h"
 
-#include "SDL.h"
-#include "SDL_image.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL_image.h"
 #include "main.h"
 
-using namespace audiere;
-using namespace std;
-
 	bool CDebugMessage::debugOn;
+
+CGame gameClass;
+CGameLogic logic;
+CDebugMessage DEBUG;
+CMainLogic mainLogic;
+CConfig CONFIG;
 
 int main(int argc, char* argv[])
 {
 
 	//If Initing everything is good, continue
-	if (CGameLogic::InitGame())
+	if (logic.InitGame())
 		printf("Successfully Inited SDL");
-	else 
-		return 666;
+	else
+        return 0;
 
 	//If we reached this point, time to start the loop
-	main::game = 1;
+	mainLogic.game = 1;
 
 	if (CConfig::skiptitleFlag == 1)
-		CGame::SetGameState(STATE_GAME);
+		gameClass.SetGameState(STATE_GAME);
 	else
-		CGame::SetGameState(STATE_LOGO);
+		gameClass.SetGameState(STATE_LOGO);
 
-	while(main::game)
+	while(mainLogic.game)
 	{
-		CGame::Think();
-		CGame::Render();
+		gameClass.Think();
+		gameClass.Render();
 		CDebugMessage::Draw();
-		CGame::flip();
+		gameClass.flip();
 	}
 
 	//We're done here, let's clean up the mess.
-	CGameLogic::CleanUp();
+	logic.CleanUp();
 
 	return 0;
 }

@@ -5,15 +5,12 @@
 #include "config.h"
 #include "DebugMessage.h"
 
-#include "SDL.h"
+#include "SDL/SDL.h"
+//#include "SDL/SDL_image.h"
 
 using namespace std;
 
-//Resolve Extrernal whatever
-SDL_Surface* CGameLogic::screen = NULL;
-TTF_Font *CGameLogic::font;
-int CGameLogic::ScreenHeight;
-int CGameLogic::ScreenWidth;
+CGame gameClass;
 
 
 CGameLogic::CGameLogic(void)
@@ -31,21 +28,21 @@ int CGameLogic::DrawTitle(void)
 	return 1;
 }
 
-SDL_Surface* CGameLogic::load_image(string filename)
+SDL_Surface* CGameLogic::load_image(std::string filename)
 {
 	SDL_Surface* loadedImage = NULL;
 	SDL_Surface* optimizedImage = NULL;
 
-	string target = "img/" + CGame::SpriteList[filename];
+	string target = "img/" + gameClass.SpriteList[filename];
 
 	loadedImage = IMG_Load(target.c_str());
 
 	 //If nothing went wrong in loading the image
-	if( loadedImage != NULL ) { 
-		//Create an optimized image 
-		optimizedImage = SDL_DisplayFormatAlpha( loadedImage ); 
-		//Free the old image 
-		SDL_FreeSurface( loadedImage ); 
+	if( loadedImage != NULL ) {
+		//Create an optimized image
+		optimizedImage = SDL_DisplayFormatAlpha( loadedImage );
+		//Free the old image
+		SDL_FreeSurface( loadedImage );
 	}
 	else
 		CDebugMessage::AddMessage("IMAGE: Cannot load \"" + filename + "\"");
@@ -55,13 +52,13 @@ SDL_Surface* CGameLogic::load_image(string filename)
 
 void CGameLogic::Draw(int x, int y, SDL_Surface* source, SDL_Surface* destination)
 {
- //Make a temporary rectangle to hold the offsets 
+ //Make a temporary rectangle to hold the offsets
 	SDL_Rect offset;
 
-	 offset.x = x; 
+	 offset.x = x;
 	 offset.y = y;
 
-	//Blit the surface 
+	//Blit the surface
 	 SDL_BlitSurface( source, NULL, destination, &offset );
 }
 
@@ -114,7 +111,7 @@ void CGameLogic::DrawProgressiveText(SDL_Surface* screen, string text, Sint16 x,
 
 void CGameLogic::DrawBackground(SDL_Surface* screen, Uint8 red, Uint8 green, Uint8 blue)
 {
-	SDL_FillRect(screen,NULL, SDL_MapRGB(SDL_GetVideoSurface()->format,red,green,blue)); 
+	SDL_FillRect(screen,NULL, SDL_MapRGB(SDL_GetVideoSurface()->format,red,green,blue));
 }
 
 void CGameLogic::MessageBox(SDL_Surface* screen, string name, string msg)
@@ -127,7 +124,7 @@ void CGameLogic::MessageBox(SDL_Surface* screen, string name, string msg)
 int CGameLogic::InitGame(void)
 {
 	ifstream indata;
-	
+
 	if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
 	{
 		printf("TTF_Init: %s\n", TTF_GetError());
@@ -135,8 +132,8 @@ int CGameLogic::InitGame(void)
 	}
 	if (TTF_Init() == -1)
 	{
-		printf("TTF_Init: %s\n", TTF_GetError());	
-		return 666;
+		printf("TTF_Init: %s\n", TTF_GetError());
+		return 64;
 	}
 
 	indata.open("cfg/config.cfg");
@@ -206,7 +203,7 @@ int CGameLogic::InitGame(void)
 
 	sprintf(title_char, "Omar Staying %d %d", time.c_str(), date.c_str());
 
-	 //Set the window caption 
+	 //Set the window caption
 	SDL_WM_SetCaption( title_char, NULL );
 
 	font = TTF_OpenFont("cfg/font.ttf", 16);
@@ -223,7 +220,7 @@ int CGameLogic::InitGame(void)
 	if (!CSound::LoadSounds())
 		return 0;
 
-	if (!CGame::LoadImages())
+	if (!gameClass.LoadImages())
 		return 0;
 
 	return 1;
@@ -231,10 +228,10 @@ int CGameLogic::InitGame(void)
 
 void CGameLogic::CleanUp(void)
 {
-	CGame::FreeImages();
+	gameClass.FreeImages();
 	TTF_CloseFont(font);
-	SDL_FreeSurface( screen ); 
+	SDL_FreeSurface( screen );
 
-	//Quit SDL 
-	SDL_Quit(); 
+	//Quit SDL
+	SDL_Quit();
 }

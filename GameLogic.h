@@ -1,7 +1,7 @@
 #pragma once
 
-#include "SDL.h"
-#include "SDL_image.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL_image.h"
 #include "Music.h"
 #include "Sound.h"
 
@@ -35,5 +35,5 @@ public:
 	int playing;
 	static int ScreenHeight, ScreenWidth;
 	static string message;
-	
+
 };
