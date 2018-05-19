@@ -1,14 +1,13 @@
 #include "GameMenu.h"
-#include "SDL/SDL.h"
-#include "Timer.h"
+#include "SDL.h"
 
-Timer globalTime;
+int CGameMenu::cursorIndex;
+SDL_Surface *CGameMenu::curTex;
+SDL_Surface *CGameMenu::menuTex;
+std::string CGameMenu::choice[MENU_MAX];
+int CGameMenu::currentMax;
 
-CGameMenu::~CGameMenu(void)
-{
-}
-
-void CGameMenu::Create(std::string choices[], int choiceCount)
+CGameMenu::CGameMenu(std::string choices [], int choiceCount)
 {
 	curTex = CGameLogic::load_image("Cursor");
 	menuTex = CGameLogic::load_image("Menu");
@@ -28,6 +27,10 @@ void CGameMenu::Create(std::string choices[], int choiceCount)
 		choice[i].swap(choices[i]);
 }
 
+CGameMenu::~CGameMenu(void)
+{
+}
+
 void CGameMenu::Draw()
 {
 	//Draw Menu Background
@@ -36,7 +39,7 @@ void CGameMenu::Draw()
 	//Draw Text
 	for (int i=0;i<MENU_MAX;i++)
 		CGameLogic::DrawText(CGameLogic::screen, choice[i], (CGameLogic::ScreenWidth/2)-(menuTex->w/2)+(menuTex->w/16), (CGameLogic::ScreenHeight)-(menuTex->h)-(menuTex->h/8)+(menuTex->h/16)+(i*32), 255,255,255, false);
-
+	
 	//Draw Cursor
 	CGameLogic::Draw((CGameLogic::ScreenWidth/2)-(menuTex->w/2), (CGameLogic::ScreenHeight)-(menuTex->h)-(menuTex->h/8)+(menuTex->h/16)+(cursorIndex*32), curTex, CGameLogic::screen);
 }
@@ -45,15 +48,10 @@ void CGameMenu::Think()
 {
 	Uint8 *keystate = SDL_GetKeyState(NULL);
 
-	if (CGameMenu::nextMoveTime < globalTime.get_ticks())
-	{
 		 if(keystate[SDLK_UP])
 			 CGameMenu::CursorMove(CUR_UP);
 		 else if (keystate[SDLK_DOWN])
 			 CGameMenu::CursorMove(CUR_DOWN);
-
-		 CGameMenu::nextMoveTime = globalTime.get_ticks() + 1000;
-	}
 }
 
 void CGameMenu::CursorMove(int direction)

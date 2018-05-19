@@ -1,4 +1,4 @@
-class CMainLogic {
+class main {
 	public:
-		int game;
+		static int game;
 };

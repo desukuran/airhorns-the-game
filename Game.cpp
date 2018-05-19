@@ -15,37 +15,45 @@
 	int konamiindex = 0;
 	int konami = 0;
 
-//Define Menu
-	std::string menu[] = { "New Game", "Continue", "Option", "Exit" };
-	/*menu[0] = "New Game";
-	menu[1] = "Continue";
-	menu[2] = "Option";
-	menu[3] = "Exit";*/
+int main::game;
 
-//The frames per second
+//The frames per second 
 const int FRAMES_PER_SECOND = 60;
 
- //Keep track of the current frame
-int frame = 0;
+ //Keep track of the current frame 
+int frame = 0; 
 
-//Whether or not to cap the frame rate bool
-bool cap = true;
+//Whether or not to cap the frame rate bool 
+bool cap = true; 
 
-//The frame rate regulator
+//The frame rate regulator 
 Timer fps;
 Timer logos;
 
 CPlayer playerEnt;
-CMainLogic mainLogic;
-CGameMenu gameMenu;
 
 // Gain access to keystate array
    Uint8 *keys = SDL_GetKeyState(NULL);
 
+	//Resolve the External Symbols
+	map<string, string> CGame::SpriteList;
+	SDL_Surface *CGame::airhorn;
+	SDL_Surface *CGame::airhorn_off;
+	SDL_Surface *CGame::title_logo;
+	SDL_Surface *CGame::logo1;
+	SDL_Surface *CGame::logo2;
+	SDL_Surface *CGameLogic::messagebox;
+
+	SDL_Event CGame::GameEvent;
+	SDL_Surface *CPlayer::player_sprite;
+
+	int CGame::gamestate;
+	int CGame::logoframe;
+
+	string CGameLogic::message;
+
 CGame::CGame(void)
-{
-	//Ugly
-	gameMenu.Create(menu, MENU_MAX);
+{	
 }
 
 CGame::~CGame(void)
@@ -61,14 +69,14 @@ int CGame::IntRand()
 
 void CGame::Think()
 {
-	while( SDL_PollEvent( &GameEvent ) )
+	while( SDL_PollEvent( &GameEvent ) ) 
 	 {
-		  //If the user has Xed out the window
-		 if( GameEvent.type == SDL_QUIT )
-		 {
-			 //Quit the program
-			 mainLogic.game = false;
-		 }
+		  //If the user has Xed out the window 
+		 if( GameEvent.type == SDL_QUIT ) 
+		 { 
+			 //Quit the program 
+			 main::game = false; 
+		 } 
 
 		if(gamestate == STATE_LOGO)
 		{
@@ -86,22 +94,22 @@ void CGame::Think()
 						konamiindex++;
 						if (konamiindex == keyzl)
 						{
-							CMusic::PlaySong("Konami", false, false);
+							CMusic::PlaySong("Konami", false, false);          
 							konami = 1;
 						}
 					}
 					else
-						konamiindex = 0;
+						konamiindex = 0;    
 				}
 			}
 				if (keys[SDLK_RETURN])
 				{
-					switch (gameMenu.menuDecision())
+					switch (CGameMenu::menuDecision())
 					{
 						case 0: CGame::SetGameState(STATE_GAME);break;
 						case 1: CGame::SetGameState(STATE_GAME);break;
 						case 2: CGame::SetGameState(STATE_GAME);break;
-						case 3: mainLogic.game = 0;break;
+						case 3: main::game = 0;break;
 					}
 				}
 			}
@@ -120,8 +128,12 @@ void CGame::SetGameState(int state)
 		if (CConfig::debugFlag)
 			CDebugMessage::AddMessage("DEBUG: Loaded Title");
 		CMusic::PlaySong("Title", true, false);
-
-		//CGameMenu(menu, 4);
+		std::string menu[MENU_MAX];
+		menu[0] = "New Game";
+		menu[1] = "Continue";
+		menu[2] = "Option";
+		menu[3] = "Exit";
+		CGameMenu::CGameMenu(menu, 4);
 	}
 	else if (state == STATE_GAME)
 	{
@@ -145,12 +157,12 @@ int CGame::LoadImages()
 	string filename = "";
 
 	getline(file, imagename);
-
+	
 	while(!file.eof())
 	{
 		file >> imagename;
 		file >> filename;
-
+		
 		SpriteList[imagename] = filename;
 	}
 
@@ -189,9 +201,9 @@ void CGame::Render()
 	}
 	else if (gamestate == STATE_TITLE)
 	{
-		DrawTitle();
-		gameMenu.Draw();
-		gameMenu.Think();
+		CGame::DrawTitle();
+		CGameMenu::Draw();
+		CGameMenu::Think();
 	}
 	else if (gamestate == STATE_GAME)
 	{
@@ -207,18 +219,18 @@ void CGame::Render()
 
 void CGame::RegulateFrameRate()
 {
-	 //Increment the frame counter
+	 //Increment the frame counter 
 	frame++;
-	 //Keep track of the current frame
-	int frame = 0;
+	 //Keep track of the current frame 
+	int frame = 0; 
 	//Whether or not to cap the frame rate
-	bool cap = true;
-	//The frame rate regulator
+	bool cap = true; 
+	//The frame rate regulator 
 	Timer fps;
 
-	 //If we want to cap the frame rate
-	if( ( cap == true ) && ( fps.get_ticks() < 1000 / FRAMES_PER_SECOND ) ) {
-		//Sleep the remaining frame time
+	 //If we want to cap the frame rate 
+	if( ( cap == true ) && ( fps.get_ticks() < 1000 / FRAMES_PER_SECOND ) ) { 
+		//Sleep the remaining frame time 
 		SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() ); }
 }
 
@@ -229,7 +241,7 @@ void CGame::AirHornOn()
 
 void CGame::flip()
 {
-	//Update Screen
+	//Update Screen 
 	SDL_Flip( CGameLogic::screen );
 }
 

@@ -2,7 +2,7 @@
 
 #include <string>
 #include "GameLogic.h"
-#include "SDL/SDL.h"
+#include "SDL.h"
 
 #define MENU_MAX 5
 
@@ -14,31 +14,26 @@ CUR_RIGHT };
 class CGameMenu
 {
 public:
-	CGameMenu();
+	CGameMenu(std::string menu[], int choiceCount);
 	~CGameMenu(void);
 
-	void Create(std::string menu[], int choiceCount);
+	static void Draw();
+	static void Think();
+	static void CursorMove(int direction);
 
-	void Draw();
-	void Think();
-	void CursorMove(int direction);
-
-	int menuDecision();
+	static int menuDecision();
 
 	// Gain access to keystate array
-	Uint8 *keys;
+	static Uint8 *keys;
 
 	//Variables
-	SDL_Surface *menuTex;
-	SDL_Surface *curTex;
+	static SDL_Surface *menuTex;
+	static SDL_Surface *curTex;
 
 	//Cursor Stuff
-	int cursorIndex; //Where the cursor is
-	int currentMax; //Current amount of choices
+	static int cursorIndex; //Where the cursor is
+	static int currentMax; //Current amount of choices
 
 	//The Actual Menu
-	std::string choice[MENU_MAX];
-
-	//Movement time
-	int nextMoveTime;
+	static std::string choice[MENU_MAX];
 };
